@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <title>VTP</title>
   <style>
   body{
 
@@ -164,9 +164,6 @@
     li{
       line-height:2rem;
     }
-    mark{
-      background:#F7CAC9;
-    }
     .sub_space{
       position:absolute;
       top:8rem;
@@ -175,6 +172,9 @@
       height:16rem;
     }
     ::selection{
+      background:#F7CAC9;
+    }
+    mark{
       background:#F7CAC9;
     }
   </style>
@@ -261,39 +261,39 @@
 
   <section>
     <!-- <h2>는 제목을 나타냅니다. 한 페이지에 한 번만 사용됩니다.-->
-      <h2>ARP<span style="font-size:small;">(Address Resolution Protocol)</span></h2>
+      <h2>VTP<span style="font-size:small">(VLAN Trunking Protocol)</span></h2>
       <div class="sub_space">
       </div>
     <article>
       <!-- <h3>는 소제목을 나타냅니다.<p>로는 본문을 작성해주세요.-->
-      <h3>소개</h3>
-      <p>ARP: (상대방의) MAC 주소를 모를 때 (상대방의) IP 주소를 통해 (상대방의) MAC 주소를 알려주는 서비스입니다.<br>
-      (MAC주소를 모르면 프레임을 형성할 수 없으므로 데이터 전송을 위해서는 MAC주소가 필수적입니다.)</p>
-      <p>IP 주소를 이더넷 주소로 변환</p>
-      <h3>설명</h3>
-      <p>LAN 전체에 Broadcast로 상대방의 IP주소를 요청(ARP Request 패킷 전송)하면 해당 IP의 상대방이 자신의 MAC주소와 함께 응답(ARP Reply 패킷 전송)을 보냅니다.</p>
+      <h3>VTP Mode</h3>
+      <p>- Server: 전체 도메인의 Vlan 생성, 삭제, 수정합니다.<br>
+         - Client: Server에게 받은 정보로 자기 정보를 동기화합니다.<br>
+         - Transparent: Server 정보를 받으면 Client에게 전달합니다.</p>
+      <h3>동작 과정</h3>
+      <p>VLAN 구축 후 스위치별로 도메인 이름과 모드를 지정합니다.<br>
+        VTP를 설정하면 같은 도메인 이름을 가진 스위치 사이의 VLAN이 동기화됩니다.<br>
+      <span style="color:#226b80;">-  #vlan database<br>
+      -  (vlan)#vtp [vtp Mode]<br>
+      -  (vlan)#vtp domain [Domain Name]<br></span></p>
     </article>
   </section>
 
   <nav>
     <div id="detail_list">
-      <p>IP 기반 프로토콜</p>
+      <p>2계층 장비 프로토콜</p>
       <ul>
-        <li><a style="color:#F0EAD6;" href="ICMP.html">ICMP</a></li>
-        <li><a style="color:#F0EAD6;" href="ARP.html">ARP</a></li>
-        <li><a style="color:#F0EAD6;" href="IGMP.html">IGMP</a></li>
+          <li><a style="color:#F0EAD6;" href="STP.html">STP</a></li>
+          <li><a style="color:#F0EAD6;" href="VTP.html">VTP</a></li>
       </ul>
     </div>
   </nav>
 
   <aside>
     <!-- <h4>는 부가설명의 제목을 나타냅니다.<p>로 본문을 작성해주세요.-->
-    <p><h4>*RARP<span style="font-size:small;">
-    (Reverse ARP)</span></h4>
-    :(자신의) IP 주소를 모를 때(IP는 관리자가 부여하기 때문) (자신의) MAC 주소를 통해 서버에서 (자신의) IP 주소를 알아내는 서비스입니다.</p>
-    <p><h4>GARP<span style="font-size:small;">
-    (Gratutious ARP)</span></h4>
-    :LAN 전체에 자신의 IP와 MAC을 Broadcast로 보내어 ARP Cache를 갱신하도록 알려주는 서비스입니다.</p>
+    <p><h4>VTP 필요성</h4>
+    같은 vlan 정보를 각각의 스위치마다 입력해야하는 번거로움을 없애고 vlan 전체를 관리하기 위함입니다.
+</p>
   </aside>
 
 </body>

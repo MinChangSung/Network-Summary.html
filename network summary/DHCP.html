@@ -242,6 +242,7 @@
         <div class="dropdown-content">
           <dl>
             <dt><a style="color:#F0EAD6;" href="Ethernet.html">Ethernet</a></dt>
+            <dt><a style="color:#F0EAD6;" href="Switch.html">Switch</a></dt>
           </dl>
         </div>
       </div>
@@ -265,9 +266,24 @@
       </div>
     <article>
       <!-- <h3>는 소제목을 나타냅니다.<p>로는 본문을 작성해주세요.-->
-      <h3>소개</h3>
-      <p>호스트에 IP 주소를 부여해줍니다.</p>
-      <h3></h3>
+      <h3>동작과정</h3>
+      <p>DHCP의 서버는 클라이언트에게 IP를 일정기간 임대합니다.<br>
+        1.서버에서 IP 자동 할당시 제외할 주소 범위를 미리 지정합니다.<br><span style="font-size:small">(DNS server,broadcast,default router..)</span><br>
+        <span style="color:#226b80;">-  (config)#ip dhcp excluded-address [Start IP-Address] [End IP-Address]</span><br>
+        2.서버에서 서브넷, 기본 게이트웨이, DNS 서버등의 사전 정보를 등록합니다.<br>
+        <span style="color:#226b80;">-  (config)#ip dhcp pool [Name]<br>
+          -  (dhcp-config)#network [N/W Address] [Subnet mask]<br>
+          -  (dhcp-config)#default-router [IP Address]<br>
+          -  (dhcp-config)#dns-server [IP Address]<br></span>
+        3.클라이언트에서 DHCP로 IP를 할당받습니다.<br>
+        <span style="color:#226b80;">-  (config)#interface [Interface Type Slot/Port]</span><br>
+      </p>
+      <h3>DHCP 메세지</h3>
+      <p>1.Discover: 클라이언트가 서버에게 IP 관련 정보를 요청합니다.<br>
+      2.Offer: 서버에서 클라이언트에게 IP 관련 정보를 전달합니다.<br>
+      3.Request: 클라이언트가 서버에게 IP를 사용 의사를 밝힙니다.<br>
+      4.ACK: 서버에서 클라이언트에게 IP 사용을 최종 허가합니다.<br>
+    </p>
     </article>
   </section>
 
@@ -283,6 +299,7 @@
         <li><a style="color:#F0EAD6;" href="DNS.html">DNS</a></li>
         <li><a style="color:#F0EAD6;" href="DHCP.html">DHCP</a></li>
         <li><a style="color:#F0EAD6;" href="HTTP.html">HTTP</a></li>
+        <li><a style="color:#F0EAD6;" href="BGP.html">BGP</a></li>
       </ul>
     </div>
   </nav>

@@ -242,6 +242,7 @@
         <div class="dropdown-content">
           <dl>
             <dt><a style="color:#F0EAD6;" href="Ethernet.html">Ethernet</a></dt>
+            <dt><a style="color:#F0EAD6;" href="Switch.html">Switch</a></dt>
           </dl>
         </div>
       </div>
@@ -268,7 +269,9 @@
       <h3>정보의 단위: Segment</h3>
       <h3>전반적인 역할</h3>
       <p>Port 번호 부여<br>
-      :송수신지 내부에서 사용할 다양한 프로세스(서비스)를 식별하기 위한 번호입니다.</p>
+        :통신 장비(하드웨어)상의 Port는 물리적 port를 의미합니다.<br>
+        반면에 4계층(소프트웨어)에서의 Port는 논리적 port를 의미합니다.<br>
+        송수신지 내부에서 사용할 다양한 프로세스(서비스)를 식별하기 위한 번호입니다.</p>
     </article>
   </section>
 
@@ -284,6 +287,11 @@
     <p><h4>*용어 정리</h4>
     프로그램:알고리즘(논리구조) 가지는 데이터<br>
     프로세스:실행중인 프로그램</p>
+    <p><h4>*port 번호 유형</h4>
+    Well-known port(0~1023):잘 알려진 포트,국제적으로 미리 예약된 포트<br>
+    registered port(1024~49151):등록된 포트,등록해야 사용 가능한 포트<br>
+    dynamic port(49152~65535):동적 포트, 누구나 등록없이 사용할 수 있는 포트<br>
+    *port 번호의 구분이 강제적이지는 않다</p>
   </aside>
 
 </body>

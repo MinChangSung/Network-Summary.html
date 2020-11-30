@@ -164,9 +164,6 @@
     li{
       line-height:2rem;
     }
-    mark{
-      background:#F7CAC9;
-    }
     .sub_space{
       position:absolute;
       top:8rem;
@@ -175,6 +172,9 @@
       height:16rem;
     }
     ::selection{
+      background:#F7CAC9;
+    }
+    mark{
       background:#F7CAC9;
     }
   </style>
@@ -261,39 +261,63 @@
 
   <section>
     <!-- <h2>는 제목을 나타냅니다. 한 페이지에 한 번만 사용됩니다.-->
-      <h2>ARP<span style="font-size:small;">(Address Resolution Protocol)</span></h2>
+      <h2>STP<span style="font-size:small">(Spanning-Tree Protocol)</span></h2>
       <div class="sub_space">
       </div>
     <article>
       <!-- <h3>는 소제목을 나타냅니다.<p>로는 본문을 작성해주세요.-->
-      <h3>소개</h3>
-      <p>ARP: (상대방의) MAC 주소를 모를 때 (상대방의) IP 주소를 통해 (상대방의) MAC 주소를 알려주는 서비스입니다.<br>
-      (MAC주소를 모르면 프레임을 형성할 수 없으므로 데이터 전송을 위해서는 MAC주소가 필수적입니다.)</p>
-      <p>IP 주소를 이더넷 주소로 변환</p>
-      <h3>설명</h3>
-      <p>LAN 전체에 Broadcast로 상대방의 IP주소를 요청(ARP Request 패킷 전송)하면 해당 IP의 상대방이 자신의 MAC주소와 함께 응답(ARP Reply 패킷 전송)을 보냅니다.</p>
+      <h3>Bridge-Loop</h3>
+      <p>
+        Broadcast의 특성상 자신이 수신받은 경로를 제외한 모든 경로로 프레임을 보내게 됩니다.
+        Redundant Topology의 특성상 자신에게 되돌아오는 다른 경로가 존재하게 됩니다.<br>
+        때문에 Redundant Topology에서 Broadcast를 사용하는 경우
+        자신이 보낸 Broadcast 프레임을 다른 통신 장비에게서 다른 경로로 되돌려 받습니다.
+        통신 장비의 입장에서는 다른 경로에서 왔기 때문에 이 프레임이 자신이 보낸 프레임인지 알지 못합니다.
+        그래서 이 프레임을 자신이 처음 보냈던 경로로 다시 보내게 되고, 이러한 동작이 반복되면서 loop에 빠지게 됩니다.
+      </p>
+      <p>CSMA/CD 프로토콜을 사용하는 Ethenet 특성상, 다른 프레임이 돌아다니지 않아야 원활한 전송이 이루어집니다.
+       때문에 loop가 발생하면 모든 통신이 마비되어 버립니다.<br>
+      이를 방지하기 위해 최단 경로를 제외한 경로는 모두 차단하여 tree 구조를 갖도록 만드는 프로토콜이 STP입니다.</p>
+       <h3>BPDU<span style="font-size:small">(Bridge Protocol Data Unit)</span></h3>
+       <p>STP를 구축하는데 사용되는 프레임 구조입니다.<br><br>
+         *Bridge-ID: 2계층 장비가 가지는 자신의 ID입니다. 8bytes(우선순위 2bytes + MAC 6bytes)로 구성됩니다.<br><br>
+         *Root-ID: Bridge-ID가 가장 작은 장비가 Root가 됩니다.<br>
+         (초기에는 각자 자신을 Root로 하지만, 이후 BPDU의 교환을 통해 Root-ID가 통일됩니다.)</p>
+        <h3>Spanning Tree 구축</h3>
+        <p>1.Root-ID를 기반으로 Root가 될 2계층 장비를 정합니다.(root bridge)<br>
+           2.나머지 2계층 장비들은 자신이 가지고 있는 포트 중에서 루트를 향하는 최단 포트를 찾습니다.(root port)<br>
+           3.다른 노드의 root port와 연결되는 포트를 제외합니다.(designated port)<br>
+           3.나머지 포트로 이어지는 경로는 모두 차단됩니다.(non designated port)</p>
+       <h3>동작 과정</h3>
+       다음은 각각의 스위치별 포트 상태 표시입니다.<br>
+       1. block state: spanning tree가 구축되지 않아 차단된 상태입니다.<br>
+       2. listening state: spanning tree를 구축하고 있는 상태입니다. 참여하지 못한 스위치는 blocking state로 남습니다.<br>
+       3. learning state: MAC 테이블을 구축하고 있는 상태입니다.<br>
+       4. forwarding state: listening과 learning이 끝나고 안정된 상태입니다. 이제부터 BPDU 이외의 프레임들도 송수신합니다.<br>
+       * disabled state: forwarding state에 문제가 생긴 상태입니다. blocking state로 전환합니다.</p>
     </article>
   </section>
 
   <nav>
     <div id="detail_list">
-      <p>IP 기반 프로토콜</p>
+      <p>2계층 장비 프로토콜</p>
       <ul>
-        <li><a style="color:#F0EAD6;" href="ICMP.html">ICMP</a></li>
-        <li><a style="color:#F0EAD6;" href="ARP.html">ARP</a></li>
-        <li><a style="color:#F0EAD6;" href="IGMP.html">IGMP</a></li>
+          <li><a style="color:#F0EAD6;" href="STP.html">STP</a></li>
+          <li><a style="color:#F0EAD6;" href="VTP.html">VTP</a></li>
       </ul>
     </div>
   </nav>
 
   <aside>
     <!-- <h4>는 부가설명의 제목을 나타냅니다.<p>로 본문을 작성해주세요.-->
-    <p><h4>*RARP<span style="font-size:small;">
-    (Reverse ARP)</span></h4>
-    :(자신의) IP 주소를 모를 때(IP는 관리자가 부여하기 때문) (자신의) MAC 주소를 통해 서버에서 (자신의) IP 주소를 알아내는 서비스입니다.</p>
-    <p><h4>GARP<span style="font-size:small;">
-    (Gratutious ARP)</span></h4>
-    :LAN 전체에 자신의 IP와 MAC을 Broadcast로 보내어 ARP Cache를 갱신하도록 알려주는 서비스입니다.</p>
+    <p><h4>loop</h4>
+    시작점과 끝점이 같은 상태, 수신된 데이터가 다시 되돌아오는(순환,반복) 상태을 말합니다.</p>
+    <p><h4>Redundant Topology</h4>
+    두 노드 사이에 활성화된 경로가 두 개 이상 존재하는 다중 경로 네트워크 구조입니다.
+    하나의 경로가 down되면 다른 경로로 서비스를 지속하기 위한 구조입니다.
+    2계층에서 안정성을 위해 자주 사용되는 구조이지만, loop에 취약합니다.</p>
+    <p><h4>2_Layer Broadcast</h4>
+    Destination MAC Address를 FF:FF:FF:FF:FF:FF로 하는 프레임입니다.</p>
   </aside>
 
 </body>

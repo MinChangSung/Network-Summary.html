@@ -242,6 +242,7 @@
         <div class="dropdown-content">
           <dl>
             <dt><a style="color:#F0EAD6;" href="Ethernet.html">Ethernet</a></dt>
+            <dt><a style="color:#F0EAD6;" href="Switch.html">Switch</a></dt>
           </dl>
         </div>
       </div>
@@ -270,8 +271,25 @@
         <span style="color:#226b80;">-  (config)#interface [Interface Type Slot/Port]</span><br>
         <span style="color:#226b80;">-  (config-if)#ip address [Ip-Address] [Subnet-mask]</span></p>
 
+        <h3>1-1. Inter-VLAN</h3>
+        <p>
+          라우터의 입장에서 VLAN은 하나의 물리적 link(Trunk)로 여럿의 논리적 link가 들어오는 꼴입니다.
+          즉 하나의 interface로 들어온 여럿의 N/W에게 어떻게 IP를 부여해야할지 곤란해집니다.
+          여기서 나온 개념이 subinterface입니다.
+          하나의 물리적 링크 안에 여럿의 논리적 링크가 있는 것에 대응하여
+          하나의 물리적 인터페이스 안에 여럿의 논리적 인터페이스를 두는 것입니다.<br>
+          1.subinterface를 구축합니다.<br>
+          <span style="color:#226b80;">-  (config)#interface [Interface Type Slot/Port].[Number(0~255)]<br></span>
+          2.연결할 VLAN의 tag를 붙입니다.<br>
+          <span style="font-size:small">(트렁크를 지나는 프레임이 자신의 VLAN을 찾아갈 수 있도록 추가 헤더를 만들어주는 설정입니다.)<br></span>
+          <span style="color:#226b80;">-  (config-subif)#encapsulation dot1q [VLAN Number]<br></span>
+          3.IP 주소를 부여합니다.<br>
+          <span style="color:#226b80;">-  (config-subif)#ip address [Ip Address] [Subnet Mask]<br></span>
+        </p>
+
       <h3>2. Routing</h3>
-        <p>다른 네트워크(브로드캐스트 범위 밖)의 정보를 찾아 기록하고,
+        <p>자신의 인터페이스에 없는
+          다른 네트워크(브로드캐스트 범위 밖)의 정보를 찾아 기록하고,
           다양한 이동 경로 중에서 최적의 이동 경로를 선정합니다.</p>
         <p>Static Routing<br>
           :관리자가 직접 모르는 주소를 찾아서 기록하고, 모든 이동 경로를 선정합니다.<br>
@@ -286,7 +304,7 @@
       <span style="color:#226b80;">-  (config)#access-list [Access-List-Number(1~99)] {Permit/Deny} [Source-Address] [Source-Wildcard-Mask]</span></p>
       <p>Extended ACL: 라우터의 인터페이스에서 특정 IP 및 특정 프로토콜에 대한 접근을 제한시킬 수 있습니다.<br>
       <span style="color:#226b80;">-  (config)#access-list [Access-List-Number(100~199)] {permit/Deny} [Protocol] [Source-Address] [Source-Wildcard-Mask] [Destination-Address] [Destination-Wildcard-Mask] [Operator(gt,lt,eq,neq)] [Port]</p>
-      <p>인터페이스에 ACL 묶기<br>
+      <p>인터페이스에 ACL 연결<br>
       <span style="color:#226b80;">-  (config)#interface [Interface Type Slot/Port]<br>
         -  (config-if)# [protocol] access-group [Access-list-Number(1~199)] {in/out}</span></p>
 
@@ -298,6 +316,38 @@
       <p>예시:)<br>
         IP: 146.34.48.0/23<br>
         Wildcard-Mask: 0.0.00000001.255</p>
+
+      <h3>NAT<span style="font-size:small">(Network Address Translation)</span></h3>
+      <p>NAT는 내부에서 외부로 나가는 IP 패킷의 TCP/UDP 포트 및 목적지 IP 등을 재기록합니다.
+        이 과정에서 다수의 사설 주소를 하나의 공인 주소로 번역하여 송출합니다. </p>
+        <p>Static 설정(1:1 매칭)<br>
+          1.NAT를 설정합니다.<br>
+        <span style="color:#226b80;">-  (config)#ip nat inside source static [Inside IP-Address] [Outside IP-Address]<br></span>
+          2.각 인터페이스에서 내부와 외부를 각각 지정합니다.<br>
+        <span style="color:#226b80;">-  (config)#interface [Interface Type Slot/Port]<br>
+        -  (config-if)#ip nat [inside/outside]<br></span>
+        </p>
+        <p>Dynamic 설정(N:N 매칭)<br>
+          1.NAT를 사용할 내부 주소 범위를 지정합니다.<br>
+          <span style="color:#226b80;">-  (config)#access-list [Number] permit [Inside IP-Address] [Wildcard-Mask]<br></span>
+          2.NAT를 사용할 외부 주소 범위를 지정합니다.<br>
+          <span style="color:#226b80;">-  (config)#ip nat pool [Name] [Start IP-Address] [End IP-Address] netmask [Subnet-Mask]<br></span>
+          3.NAT를 설정합니다.<br>
+          <span style="color:#226b80;">-  (config)#ip nat inside source list [Number] pool [name]<br></span>
+          4.각 인터페이스에서 내부와 외부를 각각 지정합니다.<br>
+          <span style="color:#226b80;">-  (config)#interface [Interface Type Slot/Port]<br>
+          -  (config-if)#ip nat [inside/outside]<br></span>
+        </p>
+        <p>PAT<span style="font-size:small">(port address translation)</span> 설정(N:1 매칭)<br>
+          1.NAT를 사용할 내부 주소 범위를 지정합니다.<br>
+        <span style="color:#226b80;">-  (config)#access-list [Number] permit [Ip-address] [Wildcard-Mask]<br></span>
+          2.NAT를 설정합니다.<br>
+        <span style="color:#226b80;">-  (config)#ip nat inside source list [Number] interface [Outside Interface Type Slot/Port] overload<br></span>
+          3.각 인터페이스에서 내부와 외부를 각각 지정합니다.<br>
+        <span style="color:#226b80;">-  (config)#interface [Interface Type Slot/Port]<br>
+        -  (config-if)#ip nat [inside/outside]<br></span>
+
+      </p>
     </article>
   </section>
 
@@ -307,7 +357,6 @@
       <ul>
         <li><a style="color:#F0EAD6;" href="RIP.html">RIP</a></li>
         <li><a style="color:#F0EAD6;" href="OSPF.html">OSPF</a></li>
-        <li><a style="color:#F0EAD6;" href="BGP.html">BGP</a></li>
       </ul>
     </div>
   </nav>
@@ -315,12 +364,24 @@
   <aside>
     <!-- <h4>는 부가설명의 제목을 나타냅니다.<p>로 본문을 작성해주세요.-->
     <p><h4>*interface</h4>
-    :매체 사이의 출입구를 가리킵니다. 한 매체가 외부와 처음으로 접촉하는 지점입니다.
+    :매체 사이의 출입구를 가리킵니다. 하나의 노드가 외부와 처음으로 접촉하는 지점입니다.
     <span style="font-size:x-small;">(서로 다른 매체의 인터페이스 두 개가 연결되면 하나의 통로가 완성됩니다.)</span></p>
     <p><h4>*R/T(Routing Table)</h4>
       :해당 라우터가 현재 알고 있는 네트워크(주소) 목록을 가리킵니다.</p>
     <p><h4>Gateway</h4>
       :LAN과 WAN을 연결해주는(Ethernet을 Internet으로 연결) 관문의 역할을 하는 인터페이스를 가리킵니다.</p>
+    <p><h4>dot1q</h4>
+    VLAN의 encapsulation(tagging) 방식 중 하나입니다.
+    IEEE802.1q와 ISL 두가지 방식이 있는데 ISL은 이제는 잘쓰이지 않고
+    IEEE802.1q를 명령어상에서는 dot1q로 표기합니다.</p>
+    <p><h4>*ACL 용어 정리</h4>
+      any: 모든 네트워크를 대상으로 할 때<br>
+      host: 단일 주소를 대상으로 할때
+    </p>
+    <p><h4>공인&사설 주소</h4>
+      공인 주소: 유료, 유일한 IP, 인터넷 가능<br>
+      사설 주소: 무료, 겹치는 IP, 인터넷 불가
+    </p>
 </aside>
 
 </body>

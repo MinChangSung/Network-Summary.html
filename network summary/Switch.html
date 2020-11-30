@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <title>Switch</title>
   <style>
   body{
 
@@ -164,9 +164,6 @@
     li{
       line-height:2rem;
     }
-    mark{
-      background:#F7CAC9;
-    }
     .sub_space{
       position:absolute;
       top:8rem;
@@ -175,6 +172,9 @@
       height:16rem;
     }
     ::selection{
+      background:#F7CAC9;
+    }
+    mark{
       background:#F7CAC9;
     }
   </style>
@@ -261,39 +261,67 @@
 
   <section>
     <!-- <h2>는 제목을 나타냅니다. 한 페이지에 한 번만 사용됩니다.-->
-      <h2>ARP<span style="font-size:small;">(Address Resolution Protocol)</span></h2>
+      <h2>Switch</h2>
       <div class="sub_space">
       </div>
     <article>
       <!-- <h3>는 소제목을 나타냅니다.<p>로는 본문을 작성해주세요.-->
-      <h3>소개</h3>
-      <p>ARP: (상대방의) MAC 주소를 모를 때 (상대방의) IP 주소를 통해 (상대방의) MAC 주소를 알려주는 서비스입니다.<br>
-      (MAC주소를 모르면 프레임을 형성할 수 없으므로 데이터 전송을 위해서는 MAC주소가 필수적입니다.)</p>
-      <p>IP 주소를 이더넷 주소로 변환</p>
-      <h3>설명</h3>
-      <p>LAN 전체에 Broadcast로 상대방의 IP주소를 요청(ARP Request 패킷 전송)하면 해당 IP의 상대방이 자신의 MAC주소와 함께 응답(ARP Reply 패킷 전송)을 보냅니다.</p>
+     <h3>Switching</h3>
+      <p>(MAC 테이블에 주소가 없다면) <br>
+        <b>Learning</b>: 모르는 MAC 주소(수신지)로부터 프레임이 수신되면 모든 포트에 해당 MAC 주소를 전송(<b>flooding</b>)하고,
+        해당 port와 MAC 주소의 연관성을 담은 MAC 테이블을 갱신합니다.</p>
+      <p>(MAC 테이블에 주소가 있다면)<br>
+        <b>Filtering</b>: 수신된 프레임의 목적지가 수신된 포트안에 포함된다면, 이 프레임을 무시합니다.<br>
+        <b>Forwarding</b>: 수신된 프레임의 목적지가 다른 포트로 이어진다면, 두 포트를 연결합니다.</p>
+      <h3>VLAN<span style="font-size:small">(Virtual LANs)</span></h3>
+      <p>3계층에서 라우터를 통해 물리적인 LAN을 구축한다면,
+        2계층의 스위치에서는 논리적인 LAN(subnet)을 구축합니다.<br>
+        같은 네트워크 주소를 사용하고 있어도 VLAN으로 분리하면
+        <span style="font-size:small">(서로 다른 네트워크 주소를 사용하는 것처럼)</span> 브로드캐스트 도메인이 분리됩니다.
+        <span style="font-size:small">(라우터에 LAN카드 하나를 추가하는데는 큰 비용이 드는데 반해
+        스위치의 VLAN을 추가하는데 따로 비용이 들지 않아 많이 사용됩니다.)</span><br>
+         1.VLAN 생성<br>
+         <span style="color:#226b80;">-  #vlan database<br>
+        -  (vlan)#vlan[number]<br></span>
+        2.Port 연결<br>
+        <span style="color:#226b80;">
+        -  (config)#interface [Interface Type Slot/Port]<br>
+        -  (config-if)#switchport access vlan[number]<br></span>
+        3.Trunk 설정<br>
+          <span style="font-size:small">(VLAN마다 Link를 따로 두지 않고 Trunk로 지정된 하나의 물리적 Link 안에 여럿의 논리적 Link를 구축합니다.)
+          <br></span>
+          <span style="color:#226b80;">
+            -  (config)#interface [Inteface Type Slot/Port]<br>
+            -  (config-if)#switchport mode trunk<br></span>
+       </p>
     </article>
   </section>
 
   <nav>
     <div id="detail_list">
-      <p>IP 기반 프로토콜</p>
+      <p>2계층 장비 프로토콜</p>
       <ul>
-        <li><a style="color:#F0EAD6;" href="ICMP.html">ICMP</a></li>
-        <li><a style="color:#F0EAD6;" href="ARP.html">ARP</a></li>
-        <li><a style="color:#F0EAD6;" href="IGMP.html">IGMP</a></li>
+        <li><a style="color:#F0EAD6;" href="STP.html">STP</a></li>
+        <li><a style="color:#F0EAD6;" href="VTP.html">VTP</a></li>
       </ul>
     </div>
   </nav>
 
   <aside>
     <!-- <h4>는 부가설명의 제목을 나타냅니다.<p>로 본문을 작성해주세요.-->
-    <p><h4>*RARP<span style="font-size:small;">
-    (Reverse ARP)</span></h4>
-    :(자신의) IP 주소를 모를 때(IP는 관리자가 부여하기 때문) (자신의) MAC 주소를 통해 서버에서 (자신의) IP 주소를 알아내는 서비스입니다.</p>
-    <p><h4>GARP<span style="font-size:small;">
-    (Gratutious ARP)</span></h4>
-    :LAN 전체에 자신의 IP와 MAC을 Broadcast로 보내어 ARP Cache를 갱신하도록 알려주는 서비스입니다.</p>
+    <p><h4>스위치의 IP</h4>
+    :일반적으로 2계칭 장비인 스위치의 인터페이스에는 ip 할당이 불가능합니다.
+    때문에 스위치 자체에 ip를 할당할 때는 기본 가상 인터페이스인 vlan1에 ip를 할당하여 사용합니다.</p>
+    <p><h4>데이터 전송 방식</h4>
+    -Simplex: 일방향 전송(TV)<br>
+    -Half-Duplex: 하나의 경로로 양방향 통신, 동시 전송 불가(무전기)<br>
+    -Full-Duplex: 각자의 경로로 양방향 통신, 동시 전송 가능(핸드폰)</p>
+  <p><h4>Flooding</h4>
+  모든 포트로 같은 프레임을 복사하여 보내는 것을 말합니다.
+복사하여 보내기 때문에 프레임을 넘치게 보낸다는 의미에서 flooding이라 하는 것 같습니다.</p>
+  <p><h4>delay & latency</h4>
+  delay: 지정된 시간보다 지체된 시간<br>
+  latency: 한 지점에 머무는 시간</p>
   </aside>
 
 </body>

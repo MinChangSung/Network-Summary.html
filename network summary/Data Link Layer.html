@@ -242,6 +242,7 @@
         <div class="dropdown-content">
           <dl>
             <dt><a style="color:#F0EAD6;" href="Ethernet.html">Ethernet</a></dt>
+            <dt><a style="color:#F0EAD6;" href="Switch.html">Switch</a></dt>
           </dl>
         </div>
       </div>
@@ -275,6 +276,8 @@
             :통신 제품에 부여되어 나오는 주소로, 각각의 통신매체를 구분합니다.</li>
           <li>FCS<br>
             :이진 신호 전송에서 오류를 감지합니다.</li>
+          <li>충돌 도메인 분리<br>
+            :2계층 장비는 Port별로 충돌 도메인을 분리하여 충돌의 확장을 차단합니다.</li>
       </ol>
     </p>
 
@@ -290,9 +293,21 @@
 
   <aside>
     <!-- <h4>는 부가설명의 제목을 나타냅니다.<p>로 본문을 작성해주세요.-->
+    <p><h4>Bridge(브릿지)</h4>
+    소프트웨어를 기반으로 하며 Half-Duplex의 전송 방식을 가지고
+    최대 16개의 port를 가질 수 있습니다.
+    상위 버전으로 스위치가 등장하면서 거의 쓰이지 않습니다.<br>
+    (Switch:하드웨어를 기반으로 하며 Full-Duplex를 제공하고 몇 백 개의 port를 가질 수도 있습니다.)</p>
     <p><h4>*디지털 송수신지</h4>
       송신지=Source<br>
     수신지=Destination</p>
+    <p><h4>도메인(Domain)</h4>
+    '영역'이라는 뜻입니다.<br>
+    <span style="font-size:x-small">(브로드캐스트 도메인은 브로드캐스트를 기준으로 나눈 영역을 말합니다.)</span></p>
+    <p><h4>Port</h4>
+    통신장비의 interface를 의미합니다. 즉 출입구를 의미합니다.</p>
+    <p><h4>Link</h4>
+    port와 port를 잇는 경로를 의미합니다.</p>
   </aside>
 
 </body>
